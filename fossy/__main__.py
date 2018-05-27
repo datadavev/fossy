@@ -34,7 +34,10 @@ def doCaptures(camera, config):
   for action in config["capture"]["actions"]:
     action_path = tnow.strftime(action["path"])
     action_path = os.path.join(base_path, action_path)
-    os.makedirs( action_path, 0o775 )
+    try:
+      os.makedirs( action_path, 0o775 )
+    except FileExistsError as e:
+      pass
     fn_dest = datetime.now().strftime(action["name"])
     fn_dest = os.path.join(action_path, fn_dest)
     doCapture(camera, action["direction"], fn_dest)
