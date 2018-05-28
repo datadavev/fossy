@@ -84,9 +84,10 @@ def doCapture(camera, direction, fn_dest):
   camera.getStaticImage(fn_dest)
 
 
-def doCaptures(camera, config, upload=False):
+def doCaptures(camera, config, upload=False, name=""):
   base_path = os.path.expanduser(config["capture"]["base_path"])
   tnow = datetime.now()
+  day_stamp = tnow.strftime("%Y%m%d")
   for action in config["capture"]["actions"]:
     action_path = tnow.strftime(action["path"])
     action_path = os.path.join(base_path, action_path)
@@ -100,7 +101,7 @@ def doCaptures(camera, config, upload=False):
     if upload:
       title = action["direction"] + " " + tnow.strftime("%Y%m%dT%H%M%S")
       description = camera
-      tags = "{} {}".format(camera, action["direction"])
+      tags = "{} {} {}".format(day_stamp, name, action["direction"])
       uploadToFlickr(config, fn_dest, title, description=description, tags=tags)
 
 
@@ -165,7 +166,7 @@ def main():
       uploadToFlickr(config, dest_fn, args.camera)
     return 0
   if args.command == "capture":
-    doCaptures(camera, config, upload=args.upload)
+    doCaptures(camera, config, upload=args.upload, name=args.camera)
     return 0
   if args.command == "authenticate":
     getFlickrToken(config)
