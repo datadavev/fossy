@@ -20,6 +20,14 @@ class FosscamCamera(object):
                    'pwd': config['password']}
 
 
+  def getSystemTime(self):
+    data = self.params
+    data['cmd'] = 'getSystemTime'
+    self._L.debug(self.url)
+    response = requests.get(self.url, params=data)
+    return response.text
+
+
   def listPTZpoints(self):
     data = self.params
     data['cmd'] = 'getPTZPresetPointList'
